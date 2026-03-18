@@ -29,6 +29,7 @@ use IO::Socket; # For sending UDP packages
 use DateTime;
 use Time::HiRes;
 use Net::MQTT::Simple;
+use File::Copy;
 #use Data::Dumper;
 
 ##########################################################################
@@ -59,9 +60,8 @@ our $lang = lblanguage();
 my $log = LoxBerry::Log->new (
 	package => 'weather4lox',
 	name => 'datatoloxone',
-	logdir => "$lbplogdir",
-	#filename => "$lbplogdir/weather4lox.log",
-	#append => 1,
+	filename => "$lbplogdir/weather4lox.log",
+	append => 1,
 );
 
 # Commandline options
@@ -1556,6 +1556,21 @@ if (-e "$lbplogdir/webpage.hfc.html") {
 
 LOGOK "Webpages created successfully.";
 
+# Copy generated HTML files to webfrontend/html so they are accessible
+# via /plugins/weather4lox/ URL
+my $htmldir = $lbphtmldir || "$lbhomedir/webfrontend/html/plugins/$lbpplugindir";
+LOGDEB "HTML target dir: $htmldir";
+if (-d "$htmldir") {
+	for my $htmlfile ("webpage.html", "webpage.dfc.html", "webpage.hfc.html", "webpage.map.html", "weatherdata.html") {
+		if (-e "$lbplogdir/$htmlfile") {
+			copy("$lbplogdir/$htmlfile", "$htmldir/$htmlfile");
+			LOGDEB "Copied $htmlfile to $htmldir/";
+		}
+	}
+} else {
+	LOGWARN "HTML dir $htmldir does not exist - cannot copy webpages for web access";
+}
+
 #
 # Create Cloud Weather Emu
 #
@@ -1891,6 +1906,14 @@ if ($emu) {
 
   LOGOK "Files for Cloud Weather Emulator created successfully.";
 
+  # Copy index.txt to emulator forecast dir so the CGI can serve it
+  my $emudir = $lbphtmldir || "$lbhomedir/webfrontend/html/plugins/$lbpplugindir";
+  $emudir .= "/emu/forecast";
+  if (-d "$emudir" && -e "$lbplogdir/index.txt") {
+    copy("$lbplogdir/index.txt", "$emudir/index.txt");
+    LOGDEB "Copied index.txt to $emudir/";
+  }
+
 }
 
 # Finish
@@ -1980,7 +2003,7 @@ sub mqttconnect
 		LOGINF "Connecting to MQTT Broker";
 		$mqtt = Net::MQTT::Simple->new($mqttbroker . ":" . $mqttport);
 		if( $mqtt_username and $mqtt_password ) {
-			LOGDEB "MQTT Login with Username and Password: Sending $mqtt_username $mqtt_password";
+			LOGDEB "MQTT Login with Username and Password: Sending $mqtt_username ********";
 			$mqtt->login($mqtt_username, $mqtt_password);
 		}
 	};
@@ -1992,7 +2015,7 @@ sub mqttconnect
 	};
 
 	# Update Plugin Status
-	$topic = "weather4lox" if !$topic;; # Use standard if not defined
+	$topic = "weather4lox" if !$topic; # Use standard if not defined
 	LOGINF "Publishing " . $topic . "/plugin/lastupdate_epoche" . " " . time();
 	$mqtt->retain($topic . "/plugin/lastupdate_epoche", time());
 
