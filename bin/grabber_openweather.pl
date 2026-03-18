@@ -863,9 +863,9 @@ if ($i < 168) {
 					if ($weather eq "804") { $code = "5";  $icon = "overcast" };
 					if (!$icon) { $icon = "clear" };
 					if (!$code) { $code = "1" };
-						$newline .= $icon;
-						$newline .= "|";
 						$newline .= $code;
+						$newline .= "|";
+						$newline .= $icon;
 						$newline .= "|";
 						$newline .= $results->{weather}->[0]->{description};
 						$newline .= "|";

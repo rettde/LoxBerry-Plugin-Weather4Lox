@@ -79,7 +79,7 @@ my $template = HTML::Template->new(
 );
 
 # Language
-my %L = LoxBerry::Web::readlanguage($template, "language.ini");
+my %L = LoxBerry::System::readlanguage($template, "language.ini");
 
 # Save Form 1 (Server Settings)
 if ($R::saveformdata1) {
