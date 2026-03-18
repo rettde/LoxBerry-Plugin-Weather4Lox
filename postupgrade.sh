@@ -10,8 +10,8 @@ ARGV5=$5 # Fifth argument is Base folder of LoxBerry
 echo "<INFO> Copy back existing config files"
 cp -p -v -r /tmp/$ARGV1\_upgrade/config/$ARGV3/* $ARGV5/config/plugins/$ARGV3/ 
 
-echo "<INFO> Copy back existing log files"
-cp -p -v -r /tmp/$ARGV1\_upgrade/log/$ARGV3/* $ARGV5/log/plugins/$ARGV3/ 
+echo "<INFO> Copy back existing data files (excluding old log files)"
+find /tmp/$ARGV1\_upgrade/log/$ARGV3/ -maxdepth 1 \( -name "*.dat" -o -name "*.html" -o -name "*.txt" \) -exec cp -p -v {} $ARGV5/log/plugins/$ARGV3/ \;
 
 echo "<INFO> Copy back custom theme files"
 cp -p -v -r /tmp/$ARGV1\_upgrade/themes/* $ARGV5/templates/plugins/$ARGV3/themes

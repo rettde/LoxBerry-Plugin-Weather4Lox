@@ -51,7 +51,8 @@ my $data = $jsonobjdata->open(filename => "$lbplogdir/weatherdata.json", lockexc
 my $log = LoxBerry::Log->new (
 	package => 'weather4lox',
 	name => 'w4l-gateway',
-	logdir => "$lbplogdir",
+	filename => "$lbplogdir/w4l-gateway.log",
+	append => 1,
 );
 
 # Commandline options

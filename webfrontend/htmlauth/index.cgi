@@ -219,7 +219,6 @@ if ($R::saveformdata1) {
 
 	$cfg->param("SERVER.PWSCATCHUPLOADGRABBER", "$R::pwscatchuploadgrabber");
 	$cfg->param("SERVER.WUGRABBER", "$R::wugrabber");
-	$cfg->param("SERVER.WUGRABBER", "$R::wugrabber");
 	$cfg->param("SERVER.LOXGRABBER", "$R::loxgrabber");
 	$cfg->param("SERVER.FOSHKGRABBER", "$R::foshkgrabber");
 	$cfg->param("SERVER.USEALTERNATEDFC", "$R::usealternatedfc");

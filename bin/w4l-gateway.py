@@ -69,9 +69,9 @@ def readconfig():
         #    global sensors
         #    sensors[item] = pconfig['sensors'][item]
         cfg = ConfigParser()
-        cfg.read(lbpconfigdir + '/weather4lox.cfg'))
-    except:
-        log.critical("Cannot read plugin configuration")
+        cfg.read(lbpconfigdir + '/weather4lox.cfg')
+    except Exception as e:
+        log.critical("Cannot read plugin configuration: %s" % str(e))
         sys.exit()
 
 def readhistory():
@@ -81,8 +81,8 @@ def readhistory():
         with open(file) as f:
             global historydata
             historydata = json.load(f)
-    except:
-        log.info("Cannot read history data. Use default (empty) dataset")
+    except Exception as e:
+        log.info("Cannot read history data. Use default (empty) dataset: %s" % str(e))
     # Set defaults
     historydata.setdefault('rain', {}).setdefault('event', {}).setdefault('amount',0)
     historydata.setdefault('rain', {}).setdefault('event', {}).setdefault('last',0)
@@ -123,8 +123,8 @@ def exit_handler(a="", b=""):
         json_object = json.dumps(historydata, indent=4)
         with open(lbpdatadir + '/history.json', 'w') as f:
             f.write(json_object)
-    except:
-        log.critical("Cannot save history data")
+    except Exception as e:
+        log.critical("Cannot save history data: %s" % str(e))
     # close the log
     if str(logdbkey) != "":
         logging.shutdown()
@@ -282,7 +282,7 @@ if not isinstance(numeric_loglevel, int):
     raise ValueError('Invalid log level: %s' % loglevel)
 
 if str(logfile) == "":
-    logfile = str(lbplogdir) + "/" + datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')[:-3] + "_w4l-gateway.log"
+    logfile = str(lbplogdir) + "/w4l-gateway-py.log"
 
 log = logging.getLogger()
 fileHandler = logging.FileHandler(logfile)
@@ -342,9 +342,6 @@ while not client.connected_flag: #wait in loop
     if counter > 60:
         log.critical("MQTT: Cannot connect to Broker %s on port %s." % (mqttconfig['server'], str(mqttconfig['port'])))
         exit()
-
-# Start MQTT Loop
-client.loop_start()
 
 # Exit handler
 signal.signal(signal.SIGTERM, exit_handler)

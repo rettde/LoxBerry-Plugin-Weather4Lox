@@ -20,7 +20,8 @@ my $action;
 # Logging
 my $log = LoxBerry::Log->new (  name => "watchdog",
 	package => 'lbweatherstation',
-	logdir => "$lbplogdir",
+	filename => "$lbplogdir/watchdog.log",
+	append => 1,
 	addtime => 1,
 );
 
@@ -124,7 +125,8 @@ sub start
 	# Logfile
 	my $lbweatherstationlog = LoxBerry::Log->new (  name => "lbws-gateway",
 		package => 'lbweatherstation',
-		logdir => "$lbplogdir",
+		filename => "$lbplogdir/lbws-gateway.log",
+		append => 1,
 		addtime => 1,
 	);
 	if ($verbose) {
