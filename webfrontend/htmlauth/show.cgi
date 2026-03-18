@@ -126,7 +126,11 @@ if ($map) {
 if ($dfc) {
 
   # Read data
-  open(F,"<$home/log/plugins/$psubfolder/dailyforecast.dat") || die "Cannot open $home/log/plugins/$psubfolder/dailyforecast.dat";
+  if (!open(F,"<$home/log/plugins/$psubfolder/dailyforecast.dat")) {
+    print "Content-type: text/html\n\n";
+    print "<html><body><p>No weather data available yet. Please wait for the first data fetch.</p></body></html>";
+    exit;
+  }
     our @dfcdata = <F>;
   close(F);
 
@@ -201,16 +205,25 @@ if ($dfc) {
 if ($hfc) {
 
   # Get current weather data from database - Needed for Sunrise and Sunset
-  open(F,"<$home/log/plugins/$psubfolder/current.dat") || die "Cannot open $home/log/plugins/$psubfolder/current.dat";
+  if (!open(F,"<$home/log/plugins/$psubfolder/current.dat")) {
+    print "Content-type: text/html\n\n";
+    print "<html><body><p>No weather data available yet. Please wait for the first data fetch.</p></body></html>";
+    exit;
+  }
     our $curdata = <F>;
   close(F);
   chomp $curdata;
+
   my @fields = split(/\|/,$curdata);
   $hour_sun_r = @fields[34];
   $hour_sun_s = @fields[36];
 
   # Read data for Hourly Forecast
-  open(F,"<$home/log/plugins/$psubfolder/hourlyforecast.dat") || die "Cannot open $home/log/plugins/$psubfolder/hourlyforecast.dat";
+  if (!open(F,"<$home/log/plugins/$psubfolder/hourlyforecast.dat")) {
+    print "Content-type: text/html\n\n";
+    print "<html><body><p>No weather data available yet. Please wait for the first data fetch.</p></body></html>";
+    exit;
+  }
     our @hfcdata = <F>;
   close(F);
 
@@ -287,7 +300,11 @@ if ($hfc) {
 #############################################
 
 # Get current weather data from database
-open(F,"<$home/log/plugins/$psubfolder/current.dat") || die "Cannot open $home/log/plugins/$psubfolder/current.dat";
+if (!open(F,"<$home/log/plugins/$psubfolder/current.dat")) {
+  print "Content-type: text/html\n\n";
+  print "<html><body><p>No weather data available yet. Please wait for the first data fetch.</p></body></html>";
+  exit;
+}
   our $curdata = <F>;
 close(F);
 
