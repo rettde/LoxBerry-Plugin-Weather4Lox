@@ -1558,11 +1558,17 @@ LOGOK "Webpages created successfully.";
 
 # Copy generated HTML files to webfrontend/html so they are accessible
 # via /plugins/weather4lox/ URL (Apache cannot follow symlinks to ramdisk)
-for my $htmlfile ("webpage.html", "webpage.dfc.html", "webpage.hfc.html", "webpage.map.html", "weatherdata.html") {
-	if (-e "$lbplogdir/$htmlfile") {
-		copy("$lbplogdir/$htmlfile", "$lbphtmldir/$htmlfile");
-		LOGDEB "Copied $htmlfile to $lbphtmldir/";
+my $htmldir = $lbphtmldir || "$lbhomedir/webfrontend/html/plugins/$lbpplugindir";
+LOGDEB "HTML target dir: $htmldir";
+if (-d "$htmldir") {
+	for my $htmlfile ("webpage.html", "webpage.dfc.html", "webpage.hfc.html", "webpage.map.html", "weatherdata.html") {
+		if (-e "$lbplogdir/$htmlfile") {
+			copy("$lbplogdir/$htmlfile", "$htmldir/$htmlfile");
+			LOGDEB "Copied $htmlfile to $htmldir/";
+		}
 	}
+} else {
+	LOGWARN "HTML dir $htmldir does not exist - cannot copy webpages for web access";
 }
 
 #

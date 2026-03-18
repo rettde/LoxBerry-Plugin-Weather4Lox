@@ -50,12 +50,13 @@ chown -vR loxberry:loxberry $LBPLOG/$pluginname/*
 
 # Copy generated HTML files to webfrontend/html so they are accessible
 # via /plugins/weather4lox/ URL (e.g. webpage.html)
-echo "DAEMON: Copying web files to HTML dir for web access" >> $LBPLOG/$pluginname/weather4lox.log
+HTMLDIR=$LBHOMEDIR/webfrontend/html/plugins/$pluginname
+echo "DAEMON: Copying web files to $HTMLDIR for web access" >> $LBPLOG/$pluginname/weather4lox.log
 for file in webpage.html webpage.dfc.html webpage.hfc.html webpage.map.html weatherdata.html; do
 	if [ -e $LBPLOG/$pluginname/$file ]; then
-		cp -p $LBPLOG/$pluginname/$file $LBPHTML/$pluginname/$file
-		chown loxberry:loxberry $LBPHTML/$pluginname/$file
-		echo "DAEMON: Copied $file to $LBPHTML/$pluginname/" >> $LBPLOG/$pluginname/weather4lox.log
+		cp -p $LBPLOG/$pluginname/$file $HTMLDIR/$file
+		chown loxberry:loxberry $HTMLDIR/$file
+		echo "DAEMON: Copied $file to $HTMLDIR/" >> $LBPLOG/$pluginname/weather4lox.log
 	fi
 done
 
