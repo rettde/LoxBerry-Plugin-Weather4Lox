@@ -29,6 +29,7 @@ use IO::Socket; # For sending UDP packages
 use DateTime;
 use Time::HiRes;
 use Net::MQTT::Simple;
+use File::Copy;
 #use Data::Dumper;
 
 ##########################################################################
@@ -1554,6 +1555,15 @@ if (-e "$lbplogdir/webpage.hfc.html") {
 }
 
 LOGOK "Webpages created successfully.";
+
+# Copy generated HTML files to webfrontend/html so they are accessible
+# via /plugins/weather4lox/ URL (Apache cannot follow symlinks to ramdisk)
+for my $htmlfile ("webpage.html", "webpage.dfc.html", "webpage.hfc.html", "webpage.map.html", "weatherdata.html") {
+	if (-e "$lbplogdir/$htmlfile") {
+		copy("$lbplogdir/$htmlfile", "$lbphtmldir/$htmlfile");
+		LOGDEB "Copied $htmlfile to $lbphtmldir/";
+	}
+}
 
 #
 # Create Cloud Weather Emu

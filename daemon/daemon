@@ -48,14 +48,14 @@ if [ ! -e $LBPLOG/$pluginname/index.txt ]; then
 fi
 chown -vR loxberry:loxberry $LBPLOG/$pluginname/* 
 
-# Create symlinks from webfrontend/html to log dir so that
-# webpage.html etc. are accessible via /plugins/weather4lox/ URL
-echo "DAEMON: Creating symlinks for web access" >> $LBPLOG/$pluginname/weather4lox.log
+# Copy generated HTML files to webfrontend/html so they are accessible
+# via /plugins/weather4lox/ URL (e.g. webpage.html)
+echo "DAEMON: Copying web files to HTML dir for web access" >> $LBPLOG/$pluginname/weather4lox.log
 for file in webpage.html webpage.dfc.html webpage.hfc.html webpage.map.html weatherdata.html; do
-	if [ ! -L $LBPHTML/$pluginname/$file ]; then
-		rm -f $LBPHTML/$pluginname/$file > /dev/null 2>&1
-		ln -s $LBPLOG/$pluginname/$file $LBPHTML/$pluginname/$file
-		echo "DAEMON: Symlink $LBPHTML/$pluginname/$file -> $LBPLOG/$pluginname/$file" >> $LBPLOG/$pluginname/weather4lox.log
+	if [ -e $LBPLOG/$pluginname/$file ]; then
+		cp -p $LBPLOG/$pluginname/$file $LBPHTML/$pluginname/$file
+		chown loxberry:loxberry $LBPHTML/$pluginname/$file
+		echo "DAEMON: Copied $file to $LBPHTML/$pluginname/" >> $LBPLOG/$pluginname/weather4lox.log
 	fi
 done
 
