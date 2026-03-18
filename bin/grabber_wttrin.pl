@@ -855,8 +855,7 @@ my $currentname = "$lbplogdir/current.dat.tmp";
 my $currentsize = -s ($currentname);
 if ($currentsize > 100) {
         system("$lbpbindir/csv2mqtt.pl --current");
-        unlink("$currentname");
-        #move($currentname, "$lbplogdir/current.dat");
+        move($currentname, "$lbplogdir/current.dat");
 }
 
 }
@@ -891,8 +890,7 @@ my $dailyname = "$lbplogdir/dailyforecast.dat.tmp";
 my $dailysize = -s ($dailyname);
 if ($dailysize > 100) {
         system("$lbpbindir/csv2mqtt.pl --daily");
-        unlink("$dailyname");
-        #move($dailyname, "$lbplogdir/dailyforecast.dat");
+        move($dailyname, "$lbplogdir/dailyforecast.dat");
 }
 
 }
@@ -927,8 +925,7 @@ my $hourlyname = "$lbplogdir/hourlyforecast.dat.tmp";
 my $hourlysize = -s ($hourlyname);
 if ($hourlysize > 100) {
         system("$lbpbindir/csv2mqtt.pl --hourly");
-        unlink("$hourlyname");
-        #move($hourlyname, "$lbplogdir/hourlyforecast.dat");
+        move($hourlyname, "$lbplogdir/hourlyforecast.dat");
 }
 
 }
