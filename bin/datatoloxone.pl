@@ -29,7 +29,6 @@ use IO::Socket; # For sending UDP packages
 use DateTime;
 use Time::HiRes;
 use Net::MQTT::Simple;
-use File::Copy;
 #use Data::Dumper;
 
 ##########################################################################
@@ -1556,21 +1555,6 @@ if (-e "$lbplogdir/webpage.hfc.html") {
 
 LOGOK "Webpages created successfully.";
 
-# Copy generated HTML files to webfrontend/html so they are accessible
-# via /plugins/weather4lox/ URL
-my $htmldir = $lbphtmldir || "$lbhomedir/webfrontend/html/plugins/$lbpplugindir";
-LOGDEB "HTML target dir: $htmldir";
-if (-d "$htmldir") {
-	for my $htmlfile ("webpage.html", "webpage.dfc.html", "webpage.hfc.html", "webpage.map.html", "weatherdata.html") {
-		if (-e "$lbplogdir/$htmlfile") {
-			copy("$lbplogdir/$htmlfile", "$htmldir/$htmlfile");
-			LOGDEB "Copied $htmlfile to $htmldir/";
-		}
-	}
-} else {
-	LOGWARN "HTML dir $htmldir does not exist - cannot copy webpages for web access";
-}
-
 #
 # Create Cloud Weather Emu
 #
@@ -1905,14 +1889,6 @@ if ($emu) {
   close(F);
 
   LOGOK "Files for Cloud Weather Emulator created successfully.";
-
-  # Copy index.txt to emulator forecast dir so the CGI can serve it
-  my $emudir = $lbphtmldir || "$lbhomedir/webfrontend/html/plugins/$lbpplugindir";
-  $emudir .= "/emu/forecast";
-  if (-d "$emudir" && -e "$lbplogdir/index.txt") {
-    copy("$lbplogdir/index.txt", "$emudir/index.txt");
-    LOGDEB "Copied index.txt to $emudir/";
-  }
 
 }
 
