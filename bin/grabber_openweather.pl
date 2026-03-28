@@ -865,6 +865,10 @@ if ($i < 168) {
 				}
 				$newline .= "-9999|";
 				$newline .= "-9999|";
+				$newline .= "-9999|";
+				$newline .= "-9999|";
+				$newline .= "-9999|";
+				$newline .= "-9999|";
 				#$newline .= "Schritt: $step Vor: $oldfields[11] Ziel: $results->{temp} Schrittweite: ";
 				#$newline .= ( ($results->{temp} - $oldfields[11]) / $delta );
 				#$newline .= "|";
